@@ -37,10 +37,10 @@ import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 /**
-* class Jsons
-*
-* user angelo.vicente
-*/
+ * class Jsons
+ *
+ * user angelo.vicente
+ */
 @Slf4j
 @UtilityClass
 public class Jsons {

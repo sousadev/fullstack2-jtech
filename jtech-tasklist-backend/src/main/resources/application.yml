@@ -6,15 +6,14 @@ spring:
     active: ${PROFILE:dev}
   datasource:
     driverClassName: org.postgresql.Driver
-    url: 
-      jdbc:postgresql://${DS_URL:localhost}:${DS_PORT:5432}/${DS_DATABASE:sansys_database}
-    password: ${DS_PASS:postgres}
-    username: ${DS_USER:postgres}
+    url: jdbc:postgresql://ep-snowy-cloud-ac29xlw0-pooler.sa-east-1.aws.neon.tech/neondb?&sslmode=require&channelBinding=require
+    password: 'npg_HXu1ndyWj4vi'
+    username: 'neondb_owner'
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     show-sql: 'true'
     hibernate:
-      ddl-auto: none
+      ddl-auto: update
     generate-ddl: 'false'
 management:
   endpoints:
@@ -22,7 +21,7 @@ management:
       exposure:
         include: '*'
 server:
-  port: ${PORT:0}
+  port: ${PORT:8080}
   forward-headers-strategy: framework
 logging:
   level:

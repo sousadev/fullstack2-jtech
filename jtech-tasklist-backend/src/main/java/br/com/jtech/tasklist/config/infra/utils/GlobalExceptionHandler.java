@@ -9,9 +9,6 @@
  * Information and shall use it only in accordance with the terms of the
  * license agreement you entered into with J-Tech.
  */
-package br.com.jtech.tasklist.config.infra.handlers;
-
-
 
 import br.com.jtech.tasklist.config.infra.exceptions.*;
 import org.springframework.http.HttpStatus;
@@ -29,7 +26,7 @@ import java.util.List;
  * Create a global exception handler for intercepting all exceptions in the api.
  *
  * @author angelo.vicente
- * class GlobalExceptionHandler
+ *         class GlobalExceptionHandler
  **/
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -54,11 +51,11 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(apiError, apiError.getStatus());
     }
 
-
     private List<ApiSubError> subErrors(MethodArgumentNotValidException ex) {
         List<ApiSubError> errors = new ArrayList<>();
         for (FieldError fieldError : ex.getBindingResult().getFieldErrors()) {
-            ApiValidationError api = new ApiValidationError(ex.getObjectName(), fieldError.getField(), fieldError.getRejectedValue(), fieldError.getDefaultMessage());
+            ApiValidationError api = new ApiValidationError(ex.getObjectName(), fieldError.getField(),
+                    fieldError.getRejectedValue(), fieldError.getDefaultMessage());
             errors.add(api);
 
         }
