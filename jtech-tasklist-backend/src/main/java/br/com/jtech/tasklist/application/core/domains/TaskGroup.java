@@ -34,5 +34,12 @@ public class TaskGroup {
                         .build();
     }
 
-    public TaskGroupEntity 
+    public TaskGroupEntity toEntity() {
+        return TaskGroup.builder()
+                        .id(UUID.fromString(id))
+                        .name(name)
+                        .description(description)
+                        .createdAt(createdAt)
+                        .build();
+    }
 }
