@@ -212,3 +212,67 @@
 2026-07-12T16:40:57.644-03:00  INFO 22267 --- [tasklist] [http-nio-8081-exec-2] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
 2026-07-12T16:40:57.644-03:00  INFO 22267 --- [tasklist] [http-nio-8081-exec-2] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
 2026-07-12T16:40:57.651-03:00  INFO 22267 --- [tasklist] [http-nio-8081-exec-2] o.s.web.servlet.DispatcherServlet        : Completed initialization in 7 ms
+2026-07-12T16:46:16.366-03:00  WARN 22267 --- [tasklist] [http-nio-8081-exec-6] .w.s.m.s.DefaultHandlerExceptionResolver : Resolved [org.springframework.web.bind.MissingRequestHeaderException: Required request header 'authorization' for method parameter type String is not present]
+2026-07-12T16:46:24.964-03:00  WARN 22267 --- [tasklist] [http-nio-8081-exec-9] .w.s.m.s.DefaultHandlerExceptionResolver : Resolved [org.springframework.web.bind.MissingRequestHeaderException: Required request header 'authorization' for method parameter type String is not present]
+2026-07-12T16:47:26.147-03:00  WARN 22267 --- [tasklist] [http-nio-8081-exec-10] com.zaxxer.hikari.pool.PoolBase          : HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@4b9b5da5 (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
+2026-07-12T16:47:26.151-03:00  WARN 22267 --- [tasklist] [http-nio-8081-exec-10] com.zaxxer.hikari.pool.PoolBase          : HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@423cfec4 (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
+2026-07-12T16:47:26.152-03:00  WARN 22267 --- [tasklist] [http-nio-8081-exec-10] com.zaxxer.hikari.pool.PoolBase          : HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@561f9902 (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
+2026-07-12T16:47:26.152-03:00  WARN 22267 --- [tasklist] [http-nio-8081-exec-10] com.zaxxer.hikari.pool.PoolBase          : HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@f148a70 (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
+2026-07-12T16:47:26.153-03:00  WARN 22267 --- [tasklist] [http-nio-8081-exec-10] com.zaxxer.hikari.pool.PoolBase          : HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@13b5ee04 (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
+2026-07-12T16:47:26.153-03:00  WARN 22267 --- [tasklist] [http-nio-8081-exec-10] com.zaxxer.hikari.pool.PoolBase          : HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@36daf868 (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
+2026-07-12T16:47:26.154-03:00  WARN 22267 --- [tasklist] [http-nio-8081-exec-10] com.zaxxer.hikari.pool.PoolBase          : HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@1ca7b038 (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
+2026-07-12T16:47:26.154-03:00  WARN 22267 --- [tasklist] [http-nio-8081-exec-10] com.zaxxer.hikari.pool.PoolBase          : HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@374bfed6 (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
+2026-07-12T16:47:26.155-03:00  WARN 22267 --- [tasklist] [http-nio-8081-exec-10] com.zaxxer.hikari.pool.PoolBase          : HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@b32e3f5 (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
+2026-07-12T16:47:26.155-03:00  WARN 22267 --- [tasklist] [http-nio-8081-exec-10] com.zaxxer.hikari.pool.PoolBase          : HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@6a4a4343 (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
+2026-07-12T16:49:03.593-03:00  WARN 22267 --- [tasklist] [http-nio-8081-exec-5] .w.s.m.s.DefaultHandlerExceptionResolver : Resolved [org.springframework.web.bind.MissingRequestHeaderException: Required request header 'token' for method parameter type String is not present]
+2026-07-12T17:16:48.804-03:00  WARN 22267 --- [tasklist] [http-nio-8081-exec-9] com.zaxxer.hikari.pool.PoolBase          : HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@34332086 (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
+2026-07-12T17:16:48.806-03:00  WARN 22267 --- [tasklist] [http-nio-8081-exec-9] com.zaxxer.hikari.pool.PoolBase          : HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@5e50effb (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
+2026-07-12T17:16:48.807-03:00  WARN 22267 --- [tasklist] [http-nio-8081-exec-9] com.zaxxer.hikari.pool.PoolBase          : HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@4cfc13d2 (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
+2026-07-12T17:16:48.808-03:00  WARN 22267 --- [tasklist] [http-nio-8081-exec-9] com.zaxxer.hikari.pool.PoolBase          : HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@f5a7d5f (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
+2026-07-12T17:16:48.809-03:00  WARN 22267 --- [tasklist] [http-nio-8081-exec-9] com.zaxxer.hikari.pool.PoolBase          : HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@22404b22 (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
+2026-07-12T17:16:48.810-03:00  WARN 22267 --- [tasklist] [http-nio-8081-exec-9] com.zaxxer.hikari.pool.PoolBase          : HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@7b3647a6 (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
+2026-07-12T17:16:48.812-03:00  WARN 22267 --- [tasklist] [http-nio-8081-exec-9] com.zaxxer.hikari.pool.PoolBase          : HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@57f8b991 (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
+2026-07-12T17:49:28.239-03:00  INFO 22267 --- [tasklist] [SpringApplicationShutdownHook] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2026-07-12T17:49:28.265-03:00  INFO 22267 --- [tasklist] [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
+2026-07-12T17:49:28.291-03:00  INFO 22267 --- [tasklist] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-07-12T17:49:28.308-03:00  INFO 22267 --- [tasklist] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2026-07-12T17:49:28.728-03:00  INFO 22267 --- [tasklist] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2026-07-12T17:49:33.437-03:00  INFO 51410 --- [tasklist] [main] br.com.jtech.tasklist.StartTasklist      : Starting StartTasklist v1.0.0-SNAPSHOT using Java 21.0.11 with PID 51410 (/Users/italosousa/desafio-jtech/fullstack2-jtech/jtech-tasklist-backend/build/classes/java/main started by italosousa in /Users/italosousa/desafio-jtech/fullstack2-jtech/jtech-tasklist-backend)
+2026-07-12T17:49:33.438-03:00 DEBUG 51410 --- [tasklist] [main] br.com.jtech.tasklist.StartTasklist      : Running with Spring Boot v3.4.0, Spring v6.2.0
+2026-07-12T17:49:33.438-03:00  INFO 51410 --- [tasklist] [main] br.com.jtech.tasklist.StartTasklist      : The following 1 profile is active: "dev"
+2026-07-12T17:49:34.349-03:00  INFO 51410 --- [tasklist] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-07-12T17:49:34.387-03:00  INFO 51410 --- [tasklist] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 30 ms. Found 2 JPA repository interfaces.
+2026-07-12T17:49:34.925-03:00  INFO 51410 --- [tasklist] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8081 (http)
+2026-07-12T17:49:34.935-03:00  INFO 51410 --- [tasklist] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-07-12T17:49:34.935-03:00  INFO 51410 --- [tasklist] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.33]
+2026-07-12T17:49:34.987-03:00  INFO 51410 --- [tasklist] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2026-07-12T17:49:34.987-03:00  INFO 51410 --- [tasklist] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1523 ms
+2026-07-12T17:49:35.184-03:00  INFO 51410 --- [tasklist] [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-07-12T17:49:35.226-03:00  INFO 51410 --- [tasklist] [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.2.Final
+2026-07-12T17:49:35.249-03:00  INFO 51410 --- [tasklist] [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2026-07-12T17:49:35.422-03:00  INFO 51410 --- [tasklist] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-07-12T17:49:35.437-03:00  INFO 51410 --- [tasklist] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-07-12T17:49:36.037-03:00  INFO 51410 --- [tasklist] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@5bcfdaf3
+2026-07-12T17:49:36.038-03:00  INFO 51410 --- [tasklist] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2026-07-12T17:49:36.124-03:00  WARN 51410 --- [tasklist] [main] org.hibernate.orm.deprecation            : HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-07-12T17:49:36.215-03:00  INFO 51410 --- [tasklist] [main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 17.10
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-07-12T17:49:36.730-03:00  INFO 51410 --- [tasklist] [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-07-12T17:49:37.404-03:00  INFO 51410 --- [tasklist] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-07-12T17:49:37.741-03:00  WARN 51410 --- [tasklist] [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-07-12T17:49:38.185-03:00  INFO 51410 --- [tasklist] [main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 15 endpoints beneath base path '/actuator'
+2026-07-12T17:49:38.243-03:00  INFO 51410 --- [tasklist] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8081 (http) with context path '/'
+2026-07-12T17:49:38.255-03:00  INFO 51410 --- [tasklist] [main] br.com.jtech.tasklist.StartTasklist      : Started StartTasklist in 5.163 seconds (process running for 5.673)
+2026-07-12T17:49:38.300-03:00  INFO 51410 --- [tasklist] [main] b.c.j.t.c.i.utils.ReadyEventListener     : >>> Connector Ready
+2026-07-12T17:49:38.301-03:00  INFO 51410 --- [tasklist] [main] b.c.j.t.c.i.utils.ReadyEventListener     : ======================================================
+2026-07-12T17:49:38.301-03:00  INFO 51410 --- [tasklist] [main] b.c.j.t.c.i.utils.ReadyEventListener     : == Execute mode:.....................'LOCAL'
+2026-07-12T17:49:38.301-03:00  INFO 51410 --- [tasklist] [main] b.c.j.t.c.i.utils.ReadyEventListener     : ======================================================
+2026-07-12T17:50:34.348-03:00  INFO 51410 --- [tasklist] [http-nio-8081-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-07-12T17:50:34.352-03:00  INFO 51410 --- [tasklist] [http-nio-8081-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-07-12T17:50:34.365-03:00  INFO 51410 --- [tasklist] [http-nio-8081-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 13 ms
