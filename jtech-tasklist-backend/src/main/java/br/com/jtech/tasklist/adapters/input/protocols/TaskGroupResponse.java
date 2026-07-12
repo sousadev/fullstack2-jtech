@@ -6,15 +6,20 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.io.Serializable;
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class AuthRequest implements Serializable {
-    private String email;
-    private String password;
-
+public class TaskGroupResponse {
+    private String id;
+    private String name;
+    private String description;
+    private String user_id;
+    private Boolean active;
+    private LocalDateTime created_at;
+    private List<TaskResponse> tasks;
 }

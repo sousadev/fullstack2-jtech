@@ -1,9 +1,11 @@
 package br.com.jtech.tasklist.adapters.input.controllers;
 
+import br.com.jtech.tasklist.adapters.input.protocols.AuthRequest;
 import br.com.jtech.tasklist.adapters.input.protocols.AuthResponse;
 import br.com.jtech.tasklist.adapters.input.protocols.CreateUserRequest;
 import br.com.jtech.tasklist.application.ports.input.AuthInputGateway;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,6 +23,18 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<AuthResponse> register(@RequestBody CreateUserRequest request) {
         AuthResponse response = gateway.register(of(request));
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<AuthResponse> login(@RequestBody AuthRequest request) {
+        AuthResponse response = gateway.login(of(request));
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/refresh")
+    public ResponseEntity<String> refreshToken(@RequestBody String userId) {
+        String response = gateway.refreshToken(userId);
         return ResponseEntity.ok(response);
     }
 }

@@ -2,9 +2,7 @@ package br.com.jtech.tasklist.adapters.output;
 
 import br.com.jtech.tasklist.adapters.input.protocols.AuthResponse;
 import br.com.jtech.tasklist.adapters.output.repositories.AuthRepository;
-import br.com.jtech.tasklist.adapters.output.repositories.entities.TaskGroupEntity;
 import br.com.jtech.tasklist.adapters.output.repositories.entities.UserEntity;
-import br.com.jtech.tasklist.application.core.domains.TaskGroup;
 import br.com.jtech.tasklist.application.core.domains.User;
 import br.com.jtech.tasklist.application.ports.output.AuthOutputGateway;
 import lombok.RequiredArgsConstructor;
@@ -34,5 +32,11 @@ public class AuthAdapter implements AuthOutputGateway {
     public Optional<User> login(User user) {
         Optional<UserEntity> entity = repository.findByEmail(user.getEmail());
         return entity.map(UserEntity::toDomain);
+    }
+
+    @Override
+    public Optional<User> findByEmail(String email) {
+        var user = repository.findByEmail(email);
+        return user.map(UserEntity::toDomain);
     }
 }

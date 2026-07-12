@@ -8,4 +8,5 @@ import java.util.Optional;
 public interface AuthOutputGateway {
     AuthResponse register(User user);
     Optional<User> login(User user);
+    Optional<User> findByEmail(String email);
 }

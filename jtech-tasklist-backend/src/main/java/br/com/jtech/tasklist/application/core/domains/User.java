@@ -4,14 +4,9 @@ import br.com.jtech.tasklist.adapters.input.protocols.CreateUserRequest;
 import lombok.*;
 
 import java.time.LocalDateTime;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 import br.com.jtech.tasklist.adapters.input.protocols.AuthRequest;
-
-import javax.swing.text.html.Option;
 
 @Getter
 @Setter
@@ -28,7 +23,6 @@ public class User {
 
     public static User of(CreateUserRequest request) {
         return User.builder()
-                .id(UUID.randomUUID())
                 .name(request.name)
                 .email(request.email)
                 .password(request.password)
@@ -42,7 +36,6 @@ public class User {
 
     public static User of(AuthRequest request) {
         return User.builder()
-                .id(UUID.randomUUID())
                 .name(request.getEmail())
                 .email(request.getEmail())
                 .password(request.getPassword())
