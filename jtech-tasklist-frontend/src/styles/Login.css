@@ -1,4 +1,6 @@
 .login-page {
+    display: flex;
+    flex-direction: column;
     min-height: 100vh;
     width: 100vw;
     display: flex;
@@ -6,12 +8,23 @@
     justify-content: center;
     padding: 1.5rem;
     background: linear-gradient(135deg, #f5f7fa 0%, #e4e9f2 100%);
+    overflow: hidden;
   }
   
   .login-card {
     width: 100%;
     max-width: 400px;
     padding: 2rem;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  }
+  
+  .login-register-card {
+    width: 100%;
+    max-width: 400px;
+    padding: 2rem;
+    margin-top: 1rem;
     background: #fff;
     border-radius: 12px;
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
@@ -52,7 +65,7 @@
   
   input:focus {
     outline: none;
-    border-color: #42b883;
+    border-color: #f79d00;
     box-shadow: 0 0 0 3px rgba(66, 184, 131, 0.15);
   }
   
@@ -75,7 +88,7 @@
     margin-top: 0.5rem;
     border: none;
     border-radius: 8px;
-    background: #42b883;
+    background: #f79d00;
     color: #fff;
     font-size: 1rem;
     font-weight: 600;
@@ -84,7 +97,7 @@
   }
   
   .submit:hover:not(:disabled) {
-    background: #369870;
+    background: #e79609;
   }
   
   .submit:disabled {

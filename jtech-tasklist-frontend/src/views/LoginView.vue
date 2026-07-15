@@ -2,7 +2,6 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
-import "@/styles/Login.css"
 
 const router = useRouter()
 const authStore = useAuthStore()
@@ -81,5 +80,10 @@ async function handleSubmit() {
         {{ isLoading ? 'Entrando...' : 'Entrar' }}
       </button>
     </form>
+    <div class="login-register-card">
+      <a href="/cadastrar">Cadastrar-se</a>
+    </div>
   </div>
 </template>
+
+<style src="@/styles/Login.css"></style>
