@@ -9,4 +9,6 @@ public interface JwtService {
     String getSubject(String token);
 
     String refreshToken(String token);
+
+    String getUserId(String token);
 }

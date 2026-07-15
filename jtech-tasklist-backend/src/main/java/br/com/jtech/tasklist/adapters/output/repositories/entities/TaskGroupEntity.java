@@ -53,7 +53,7 @@ public class TaskGroupEntity {
                 .id(id != null ? id.toString() : null)
                 .name(name)
                 .description(description)
-                .createdAt(createdAt)
+                .createdAt(createdAt != null ? createdAt : LocalDateTime.now())
                 .user_id(user != null && user.getId() != null ? user.getId().toString() : null)
                 .tasks(tasks != null ? tasks.stream().map(Task::of).toList() : null)
                 .build();

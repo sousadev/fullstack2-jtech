@@ -3,6 +3,7 @@ import { useAuthStore } from '@/stores/auth'
 
 const LoginView = () => import('../views/LoginView.vue')
 const TarefasView = () => import('../views/TarefasView.vue')
+const VisualizarTarefaView = () => import('../views/VisualizarTarefaView.vue')
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -24,6 +25,12 @@ const router = createRouter({
       path: '/tarefas',
       name: 'tarefas',
       component: TarefasView,
+      meta: { requiresAuth: true },
+    },
+    {
+      path: '/ver-tarefas/:id',
+      name: 'visualizar-tarefa',
+      component: VisualizarTarefaView,
       meta: { requiresAuth: true },
     },
     {

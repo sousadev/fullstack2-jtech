@@ -65,6 +65,11 @@ public class JwtAdapter implements JwtService {
     }
 
     @Override
+    public String getUserId(String token) {
+        return getSubject(token);
+    }
+
+    @Override
     public String refreshToken(String token) {
         String userId = getSubject(token);
         return generateToken(userId);

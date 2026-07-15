@@ -21,8 +21,10 @@ public class TaskGroupUseCase implements TaskGroupInputGateway {
 
     @Override
     public TaskGroupResponse create(String token, TaskGroupRequest taskGroupRequest) {
-        String userId = jwtService.isValid(token) ? jwtService.getSubject(token) : null;
+        String userId = jwtService.isValid(token) ? jwtService.getUserId(token) : null;
+        System.out.println("User "+ userId);
         taskGroupRequest.setUser_id(userId);
+
         TaskGroup taskGroup = TaskGroup.of(taskGroupRequest);
         return gateway.create(userId, taskGroup);
     }

@@ -19,11 +19,11 @@ public class TaskGroupController {
 
     @PostMapping
     public ResponseEntity<TaskGroupResponse> create(@RequestBody TaskGroupRequest request, @RequestHeader String authorization) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(gateway.create(authorization, request));
+        return ResponseEntity.status(HttpStatus.CREATED).body(gateway.create(authorization.replace("Bearer ", ""), request));
     }
 
     @GetMapping
-    public ResponseEntity<List<TaskGroupResponse>> findAll(@RequestHeader String token) {
-        return ResponseEntity.ok(gateway.findAllByUser(token));
+    public ResponseEntity<List<TaskGroupResponse>> findAll(@RequestHeader String authorization) {
+        return ResponseEntity.ok(gateway.findAllByUser(authorization.replace("Bearer ", "")));
     }
 }

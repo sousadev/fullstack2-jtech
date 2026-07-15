@@ -6,6 +6,7 @@ import { api } from '@/services/api'
 import type { TaskGroupResponse } from '@/types/taskGroup'
 import type { TaskResponse } from '@/types/task'
 import '@/styles/Tarefas.css'
+import { taskService } from '@/services/taskService'
 
 const authStore = useAuthStore()
 const router = useRouter()
@@ -22,19 +23,26 @@ const tasks = ref<TaskResponse[]>([])
 const isLoading = ref(false)
 const isLoadingTasks = ref(false)
 const error = ref('')
+const isCreateGroupModalOpen = ref(false)
+const isCreatingGroup = ref(false)
+const createGroupError = ref('')
+const newGroup = ref({ name: '', description: '' })
 
 const selectedGroup = computed(() =>
   taskGroups.value.find((group) => group.id === selectedGroupId.value) ?? null,
 )
 
 async function loadTaskGroups() {
-  if (!authStore.token) return
+  if (!authStore.token) {
+    window.location.href = '/login'
+    return
+  }
 
   isLoading.value = true
   error.value = ''
 
   try {
-    const response = await api.get<TaskGroupResponse[]>('/task-groups', authStore.token)
+    const response = await taskService.getTaskGroups(authStore.token)
     taskGroups.value = response
   } catch {
     error.value = 'Não foi possível carregar os grupos de tarefas.'
@@ -44,13 +52,14 @@ async function loadTaskGroups() {
 }
 
 async function loadTasks(groupId: string) {
+  window.location.href = `/ver-tarefas/${groupId}`
   if (!authStore.token) return
 
   selectedGroupId.value = groupId
   isLoadingTasks.value = true
 
   try {
-    const response = await api.get<TaskResponse[]>(`/task-groups/${groupId}/tasks`, authStore.token)
+    const response = await taskService.getTasks(groupId, authStore.token)
     tasks.value = response
   } catch {
     tasks.value = []
@@ -60,8 +69,54 @@ async function loadTasks(groupId: string) {
   }
 }
 
+function openCreateGroupModal() {
+  createGroupError.value = ''
+  newGroup.value = { name: '', description: '' }
+  isCreateGroupModalOpen.value = true
+}
+
+function closeCreateGroupModal() {
+  isCreateGroupModalOpen.value = false
+  createGroupError.value = ''
+  newGroup.value = { name: '', description: '' }
+}
+
+async function handleCreateGroup() {
+  if (!authStore.token) return
+
+  const name = newGroup.value.name.trim()
+  const description = newGroup.value.description.trim()
+
+  if (!name) {
+    createGroupError.value = 'Informe o nome do grupo.'
+    return
+  }
+
+  isCreatingGroup.value = true
+  createGroupError.value = ''
+
+  try {
+    const createdGroup = await taskService.createTaskGroup(name, description, authStore.token)
+    taskGroups.value = [createdGroup, ...taskGroups.value]
+    closeCreateGroupModal()
+    selectedGroupId.value = null
+    tasks.value = []
+  } catch {
+    createGroupError.value = 'Não foi possível criar o grupo.'
+  } finally {
+    isCreatingGroup.value = false
+  }
+}
+
+function verifyAuthentication() {
+  if (!authStore.token) {
+    router.push({ name: 'login' })
+  }
+}
+
 onMounted(() => {
   loadTaskGroups()
+  verifyAuthentication()
 })
 
 function handleLogout() {
@@ -101,7 +156,7 @@ function handleLogout() {
       <section class="tasks-section">
         <div class="section-title">
           <h3>Grupos de tarefas</h3>
-          <a href="#">Organizar</a>
+          <button type="button" class="link-button" @click="openCreateGroupModal">Novo Grupo</button>
         </div>
 
         <p v-if="error" class="feedback-error">{{ error }}</p>
@@ -147,5 +202,35 @@ function handleLogout() {
         </div>
       </section>
     </section>
+
+    <div v-if="isCreateGroupModalOpen" class="modal-overlay" @click.self="closeCreateGroupModal">
+      <div class="modal-card">
+        <div class="modal-header">
+          <h3>Novo grupo de tarefas</h3>
+          <button type="button" class="close-button" @click="closeCreateGroupModal">×</button>
+        </div>
+
+        <form class="modal-form" @submit.prevent="handleCreateGroup">
+          <div class="form-field">
+            <label for="group-name">Nome</label>
+            <input id="group-name" v-model="newGroup.name" type="text" placeholder="Ex.: Atividades domésticas" />
+          </div>
+
+          <div class="form-field">
+            <label for="group-description">Descrição</label>
+            <textarea id="group-description" v-model="newGroup.description" rows="3" placeholder="Descreva este grupo..."></textarea>
+          </div>
+
+          <p v-if="createGroupError" class="modal-error">{{ createGroupError }}</p>
+
+          <div class="modal-actions">
+            <button type="button" class="cancel-button" @click="closeCreateGroupModal">Cancelar</button>
+            <button type="submit" class="submit-button" :disabled="isCreatingGroup">
+              {{ isCreatingGroup ? 'Criando...' : 'Criar grupo' }}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
   </main>
 </template>

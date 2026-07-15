@@ -8,3 +8,17 @@ export interface TaskResponse {
   created_at: string
   updated_at: string
 }
+
+export interface TaskGroupResponse {
+  id: string
+  name: string
+  user_id: string
+  created_at: string
+  updated_at: string
+}
+
+export interface TaskRequest {
+  name: string
+  description: string
+  active: boolean
+}

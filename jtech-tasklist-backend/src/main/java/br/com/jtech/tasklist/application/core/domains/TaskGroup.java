@@ -33,6 +33,7 @@ public class TaskGroup {
                 .name(request.getName())
                 .description(request.getDescription())
                 .user_id(request.getUser_id())
+                .createdAt(LocalDateTime.now())
                 .build();
     }
 
