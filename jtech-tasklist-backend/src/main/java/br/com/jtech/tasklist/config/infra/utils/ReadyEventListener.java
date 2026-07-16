@@ -11,7 +11,7 @@
  *
  */
 
-package br.com.jtech.tasklist.config.infra.listeners;
+package br.com.jtech.tasklist.config.infra.utils;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,13 +22,13 @@ import org.springframework.context.event.EventListener;
 
 /**
  * class ReadyEventListener
+ * 
  * @author angelo.vicente
  */
 @Slf4j
 @Configuration
 @RequiredArgsConstructor
 public class ReadyEventListener {
-
 
     @Value("${application.environment:LOCAL}")
     private String environment;
