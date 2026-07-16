@@ -11,12 +11,6 @@ import { taskService } from '@/services/taskService'
 const authStore = useAuthStore()
 const router = useRouter()
 
-const summary = [
-  { label: 'Pendentes', value: '6', accent: 'orange' },
-  { label: 'Concluídas', value: '12', accent: 'gold' },
-  { label: 'Hoje', value: '3', accent: 'cream' },
-]
-
 const taskGroups = ref<TaskGroupResponse[]>([])
 const selectedGroupId = ref<string | null>(null)
 const tasks = ref<TaskResponse[]>([])
@@ -31,6 +25,34 @@ const newGroup = ref({ name: '', description: '' })
 const selectedGroup = computed(() =>
   taskGroups.value.find((group) => group.id === selectedGroupId.value) ?? null,
 )
+
+const allTasks = computed(() => taskGroups.value.flatMap((group) => group.tasks ?? []))
+
+const summary = computed(() => {
+  const pendingCount = allTasks.value.filter((task) => {
+    const normalized = (task.status ?? '').toString().trim().toLowerCase()
+    return normalized === 'pending' || normalized === 'todo' || normalized === 'to-do' || normalized === 'to_do' || (!task.status && !task.active)
+  }).length
+
+  const completedCount = allTasks.value.filter((task) => {
+    const normalized = (task.status ?? '').toString().trim().toLowerCase()
+    return normalized === 'completed' || normalized === 'done' || normalized === 'finished' || normalized === 'complete'
+  }).length
+
+  const today = new Date()
+  const startOfToday = new Date(today.getFullYear(), today.getMonth(), today.getDate())
+
+  const createdTodayCount = allTasks.value.filter((task) => {
+    const createdAt = task.created_at ? new Date(task.created_at) : null
+    return createdAt && createdAt >= startOfToday
+  }).length
+
+  return [
+    { label: 'Pendentes', value: String(pendingCount), accent: 'blue' },
+    { label: 'Concluídas', value: String(completedCount), accent: 'indigo' },
+    { label: 'Hoje', value: String(createdTodayCount), accent: 'slate' },
+  ]
+})
 
 async function loadTaskGroups() {
   if (!authStore.token) {
@@ -143,7 +165,6 @@ function handleLogout() {
           <h2>Você está no caminho certo!</h2>
           <p>Continue mantendo o foco e finalize as tarefas mais importantes hoje.</p>
         </div>
-        <button type="button" class="primary-action">+ Nova tarefa</button>
       </div>
 
       <div class="summary-grid">
@@ -183,23 +204,6 @@ function handleLogout() {
           </button>
         </div>
 
-        <div v-if="selectedGroup" class="task-details">
-          <div class="section-title compact">
-            <h3>{{ selectedGroup.name }}</h3>
-            <span>{{ tasks.length }} itens</span>
-          </div>
-
-          <div v-if="isLoadingTasks" class="loading-state">Carregando tarefas...</div>
-          <ul v-else-if="tasks.length" class="task-list">
-            <li v-for="task in tasks" :key="task.id" class="task-item">
-              <div>
-                <h5>{{ task.name }}</h5>
-                <p>{{ task.description || 'Sem descrição' }}</p>
-              </div>
-            </li>
-          </ul>
-          <p v-else class="empty-state">Nenhuma tarefa cadastrada neste grupo.</p>
-        </div>
       </section>
     </section>
 

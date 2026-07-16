@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 
 const LoginView = () => import('../views/LoginView.vue')
+const CadastroView = () => import('../views/CadastroView.vue')
 const TarefasView = () => import('../views/TarefasView.vue')
 const VisualizarTarefaView = () => import('../views/VisualizarTarefaView.vue')
 
@@ -20,6 +21,11 @@ const router = createRouter({
       path: '/login',
       name: 'login',
       component: LoginView,
+    },
+    {
+      path: '/cadastrar',
+      name: 'cadastro',
+      component: CadastroView,
     },
     {
       path: '/tarefas',

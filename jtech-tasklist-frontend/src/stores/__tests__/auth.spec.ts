@@ -6,6 +6,7 @@ import { authService } from '@/services/authService'
 vi.mock('@/services/authService', () => ({
   authService: {
     login: vi.fn(),
+    register: vi.fn(),
   },
 }))
 
@@ -42,6 +43,23 @@ describe('auth store', () => {
     expect(store.token).toBe('persisted-token')
     expect(window.localStorage.getItem('jtech-auth-token')).toBe('persisted-token')
     expect(window.localStorage.getItem('jtech-auth-user')).toContain('ana@email.com')
+  })
+
+  it('persists token and user after register', async () => {
+    vi.mocked(authService.register).mockResolvedValueOnce({
+      id: '2',
+      email: 'novo@email.com',
+      name: 'Novo',
+      token: 'registered-token',
+      createdAt: '2024-01-01T00:00:00.000Z',
+    })
+
+    const store = useAuthStore()
+    await store.register('Novo', 'novo@email.com', '123456')
+
+    expect(store.token).toBe('registered-token')
+    expect(window.localStorage.getItem('jtech-auth-token')).toBe('registered-token')
+    expect(window.localStorage.getItem('jtech-auth-user')).toContain('novo@email.com')
   })
 
   it('hydrates the auth state from storage', () => {

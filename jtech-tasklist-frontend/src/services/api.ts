@@ -1,3 +1,5 @@
+import { useAuthStore } from '@/stores/auth'
+
 const BASE_URL = import.meta.env.VITE_API_URL
 
 class ApiError extends Error {
@@ -14,6 +16,13 @@ async function request<T>(
   options: RequestInit = {},
   token?: string,
 ): Promise<T> {
+  const authStore = useAuthStore()
+  const isAuthRequest = path === '/auth/login' || path === '/auth/register'
+
+  if (!isAuthRequest && !authStore.ensureActiveSession()) {
+    throw new Error('Sessão expirada')
+  }
+
   const headers: Record<string, string> = {
     'Content-Type': 'application/json',
   }
@@ -32,6 +41,12 @@ async function request<T>(
 
   if (!response.ok) {
     const message = await response.text()
+
+    if (response.status === 401) {
+      authStore.logout()
+      throw new ApiError(response.status, 'Sessão expirada')
+    }
+
     throw new ApiError(response.status, message || response.statusText)
   }
 

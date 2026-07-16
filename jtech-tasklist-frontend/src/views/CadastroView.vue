@@ -6,23 +6,30 @@ import { useAuthStore } from '@/stores/auth'
 const router = useRouter()
 const authStore = useAuthStore()
 
-const email = ref('')
-const password = ref('')
-const errors = ref<{ email?: string; password?: string; general?: string }>({})
+const form = ref({
+  name: '',
+  email: '',
+  password: '',
+})
+const errors = ref<{ name?: string; email?: string; password?: string; general?: string }>({})
 const isLoading = ref(false)
 
 function validate(): boolean {
   errors.value = {}
 
-  if (!email.value.trim()) {
+  if (!form.value.name.trim()) {
+    errors.value.name = 'Informe o nome'
+  }
+
+  if (!form.value.email.trim()) {
     errors.value.email = 'Informe o e-mail'
   }
 
-  if (!password.value.trim()) {
+  if (!form.value.password.trim()) {
     errors.value.password = 'Informe a senha'
   }
 
-  return !errors.value.email && !errors.value.password
+  return !errors.value.name && !errors.value.email && !errors.value.password
 }
 
 async function handleSubmit() {
@@ -32,10 +39,10 @@ async function handleSubmit() {
   errors.value.general = undefined
 
   try {
-    await authStore.login(email.value.trim(), password.value)
+    await authStore.register(form.value.name.trim(), form.value.email.trim(), form.value.password)
     router.push({ name: 'tarefas' })
   } catch {
-    errors.value.general = 'Não foi possível fazer login. Verifique suas credenciais.'
+    errors.value.general = 'Não foi possível criar a conta. Tente novamente.'
   } finally {
     isLoading.value = false
   }
@@ -44,18 +51,28 @@ async function handleSubmit() {
 
 <template>
   <div class="login-page">
-    <div class="login-card">
-      <img src="@/assets/tasker1.png" alt="Logo" class="logo" width="330px" />
-    </div>
     <form class="login-card" @submit.prevent="handleSubmit">
-      <h1>Entrar</h1>
-      <p class="subtitle">Acesse sua conta para gerenciar suas tarefas</p>
+      <h1>Criar conta</h1>
+      <p class="subtitle">Cadastre-se para organizar suas tarefas</p>
+
+      <div class="field">
+        <label for="name">Nome</label>
+        <input
+          id="name"
+          v-model="form.name"
+          type="text"
+          autocomplete="name"
+          placeholder="Seu nome"
+          :aria-invalid="!!errors.name"
+        />
+        <span v-if="errors.name" class="error">{{ errors.name }}</span>
+      </div>
 
       <div class="field">
         <label for="email">E-mail</label>
         <input
           id="email"
-          v-model="email"
+          v-model="form.email"
           type="email"
           autocomplete="email"
           placeholder="seu@email.com"
@@ -68,9 +85,9 @@ async function handleSubmit() {
         <label for="password">Senha</label>
         <input
           id="password"
-          v-model="password"
+          v-model="form.password"
           type="password"
-          autocomplete="current-password"
+          autocomplete="new-password"
           placeholder="••••••••"
           :aria-invalid="!!errors.password"
         />
@@ -80,11 +97,12 @@ async function handleSubmit() {
       <p v-if="errors.general" class="error general">{{ errors.general }}</p>
 
       <button type="submit" class="submit" :disabled="isLoading">
-        {{ isLoading ? 'Entrando...' : 'Entrar' }}
+        {{ isLoading ? 'Cadastrando...' : 'Criar conta' }}
       </button>
     </form>
+
     <div class="login-register-card">
-      <router-link to="/cadastrar" class="link">Cadastrar-se</router-link>
+      <router-link to="/login" class="link">Já tenho conta</router-link>
     </div>
   </div>
 </template>

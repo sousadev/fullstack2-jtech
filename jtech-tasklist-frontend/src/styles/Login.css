@@ -1,107 +1,102 @@
 .login-page {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-    width: 100vw;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 1.5rem;
-    background: linear-gradient(135deg, #f5f7fa 0%, #e4e9f2 100%);
-    overflow: hidden;
-  }
-  
-  .login-card {
-    width: 100%;
-    max-width: 400px;
-    padding: 2rem;
-    background: #fff;
-    border-radius: 12px;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
-  }
-  
-  .login-register-card {
-    width: 100%;
-    max-width: 400px;
-    padding: 2rem;
-    margin-top: 1rem;
-    background: #fff;
-    border-radius: 12px;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
-  }
-  
-  h1 {
-    margin: 0 0 0.5rem;
-    font-size: 1.75rem;
-    color: #1a1a2e;
-  }
-  
-  .subtitle {
-    margin: 0 0 1.5rem;
-    color: #6b7280;
-    font-size: 0.95rem;
-  }
-  
-  .field {
-    display: flex;
-    flex-direction: column;
-    gap: 0.375rem;
-    margin-bottom: 1rem;
-  }
-  
-  label {
-    font-size: 0.875rem;
-    font-weight: 500;
-    color: #374151;
-  }
-  
-  input {
-    padding: 0.625rem 0.75rem;
-    border: 1px solid #d1d5db;
-    border-radius: 8px;
-    font-size: 1rem;
-    transition: border-color 0.2s;
-  }
-  
-  input:focus {
-    outline: none;
-    border-color: #f79d00;
-    box-shadow: 0 0 0 3px rgba(66, 184, 131, 0.15);
-  }
-  
-  input[aria-invalid='true'] {
-    border-color: #ef4444;
-  }
-  
-  .error {
-    font-size: 0.8rem;
-    color: #ef4444;
-  }
-  
-  .error.general {
-    margin-bottom: 1rem;
-  }
-  
-  .submit {
-    width: 100%;
-    padding: 0.75rem;
-    margin-top: 0.5rem;
-    border: none;
-    border-radius: 8px;
-    background: #f79d00;
-    color: #fff;
-    font-size: 1rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background 0.2s;
-  }
-  
-  .submit:hover:not(:disabled) {
-    background: #e79609;
-  }
-  
-  .submit:disabled {
-    opacity: 0.7;
-    cursor: not-allowed;
-  }
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  width: 100vw;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 45%, #2563eb 100%);
+  overflow: hidden;
+}
+
+.login-card,
+.login-register-card {
+  width: 100%;
+  max-width: 400px;
+  padding: 2rem;
+  background: rgba(255, 255, 255, 0.96);
+  border-radius: 16px;
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.2);
+  margin-bottom: 1.5rem;
+}
+
+.login-register-card {
+  margin-top: 1rem;
+}
+
+h1 {
+  margin: 0 0 0.5rem;
+  font-size: 1.75rem;
+  color: #0f172a;
+}
+
+.subtitle {
+  margin: 0 0 1.5rem;
+  color: #475569;
+  font-size: 0.95rem;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+  margin-bottom: 1rem;
+}
+
+label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #334155;
+}
+
+input {
+  padding: 0.625rem 0.75rem;
+  border: 1px solid #93c5fd;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: border-color 0.2s;
+}
+
+input:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+
+input[aria-invalid='true'] {
+  border-color: #ef4444;
+}
+
+.error {
+  font-size: 0.8rem;
+  color: #ef4444;
+}
+
+.error.general {
+  margin-bottom: 1rem;
+}
+
+.submit {
+  width: 100%;
+  padding: 0.75rem;
+  margin-top: 0.5rem;
+  border: none;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.submit:hover:not(:disabled) {
+  background: linear-gradient(135deg, #1d4ed8 0%, #3b82f6 100%);
+}
+
+.submit:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
   
