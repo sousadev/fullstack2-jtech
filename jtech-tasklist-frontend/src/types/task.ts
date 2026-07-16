@@ -5,6 +5,7 @@ export interface TaskResponse {
   user_id: string
   task_group_id: string
   active: boolean
+  status?: 'PENDING' | 'IN_PROGRESS' | 'COMPLETED' | 'CANCELLED' | null
   created_at: string
   updated_at: string
 }
@@ -18,8 +19,9 @@ export interface TaskGroupResponse {
 }
 
 export interface TaskRequest {
+  id?: string
   name: string
   description: string
-  status: string
+  status: 'PENDING' | 'IN_PROGRESS' | 'COMPLETED' | 'CANCELLED'  
   group_id: string
 }

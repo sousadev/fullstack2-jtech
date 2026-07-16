@@ -10,7 +10,7 @@ interface TaskFormState {
   group_id: string
   name: string
   description: string
-  status: 'todo' | 'doing' | 'done' | 'cancelled'
+  status: 'PENDING' | 'IN_PROGRESS' | 'COMPLETED' | 'CANCELLED'
 }
 
 const route = useRoute()
@@ -30,27 +30,50 @@ const newTaskForm = ref<TaskFormState>({
   group_id: '',
   name: '',
   description: '',
-  status: 'todo',
+  status: 'PENDING',
 })
 const statusOptions = [
-  { value: 'todo', label: 'A fazer' },
-  { value: 'doing', label: 'Em andamento' },
-  { value: 'done', label: 'Concluído' },
-  { value: 'cancelled', label: 'Cancelado' },
+  { value: 'PENDING', label: 'A fazer' },
+  { value: 'IN_PROGRESS', label: 'Em andamento' },
+  { value: 'COMPLETED', label: 'Concluído' },
+  { value: 'CANCELLED', label: 'Cancelado' },
 ]
 
 const columns = [
-  { key: 'todo', title: 'A fazer', subtitle: 'Pendentes' },
-  { key: 'doing', title: 'Em andamento', subtitle: 'Em progresso' },
-  { key: 'done', title: 'Concluído', subtitle: 'Finalizadas' },
-  { key: 'cancelled', title: 'Cancelado', subtitle: 'Canceladas' },
+  { key: 'PENDING', title: 'A fazer', subtitle: 'Pendentes' },
+  { key: 'IN_PROGRESS', title: 'Em andamento', subtitle: 'Em progresso' },
+  { key: 'COMPLETED', title: 'Concluído', subtitle: 'Finalizadas' },
+  { key: 'CANCELLED', title: 'Cancelado', subtitle: 'Canceladas' },
 ]
 
+function normalizeTaskStatus(task: TaskResponse) {
+  const rawStatus = task.status ?? (task as TaskResponse & { current_status?: string }).current_status ?? (task as TaskResponse & { state?: string }).state
+  const normalized = typeof rawStatus === 'string' ? rawStatus.trim().toLowerCase() : ''
+
+  if (['pending', 'to-do', 'to_do', 'pending', 'backlog', 'new'].includes(normalized)) {
+    return 'PENDING'
+  }
+
+  if (['doing', 'in_progress', 'in-progress', 'in progress', 'active', 'working'].includes(normalized)) {
+    return 'IN_PROGRESS'
+  }
+
+  if (['done', 'completed', 'finish', 'finished'].includes(normalized)) {
+    return 'COMPLETED'
+  }
+
+  if (['cancelled', 'canceled', 'cancel', 'blocked', 'rejected'].includes(normalized)) {
+    return 'CANCELLED'
+  }
+
+  return task.active ? 'IN_PROGRESS' : 'PENDING'
+}
+
 const tasksByColumn = computed(() => ({
-  todo: tasks.value.filter((task) => !task.active),
-  doing: tasks.value.filter((task) => task.active),
-  done: [],
-  cancelled: [],
+  PENDING: tasks.value.filter((task) => normalizeTaskStatus(task) === 'PENDING'),
+  IN_PROGRESS: tasks.value.filter((task) => normalizeTaskStatus(task) === 'IN_PROGRESS'),
+  COMPLETED: tasks.value.filter((task) => normalizeTaskStatus(task) === 'COMPLETED'),
+  CANCELLED: tasks.value.filter((task) => normalizeTaskStatus(task) === 'CANCELLED'),
 }))
 
 async function loadTasks() {
@@ -64,10 +87,29 @@ async function loadTasks() {
 
   try {
     const response = await taskService.getAllTasksByGroup(taskGroupId.value, authStore.token)
-    tasks.value = response.tasks
-    // const groups = await taskService.getTaskGroups(authStore.token)
-    // const selectedGroup = groups.find((item) => item.id === taskGroupId.value)
-    // groupName.value = selectedGroup?.name ?? 'Grupo de tarefas'
+    const payload = response as unknown
+
+    let nextTasks: TaskResponse[] = []
+
+    if (Array.isArray(payload)) {
+      nextTasks = payload as TaskResponse[]
+    } else if (payload && typeof payload === 'object') {
+      const record = payload as Record<string, unknown>
+
+      if (Array.isArray(record.tasks)) {
+        nextTasks = record.tasks as TaskResponse[]
+      } else if (Array.isArray((record.data as unknown[] | undefined))) {
+        nextTasks = record.data as TaskResponse[]
+      } else if (Array.isArray((record.result as unknown[] | undefined))) {
+        nextTasks = record.result as TaskResponse[]
+      }
+    }
+
+    tasks.value = nextTasks
+
+    const groups = await taskService.getTaskGroups(authStore.token)
+    const selectedGroup = groups.find((item) => item.id === taskGroupId.value)
+    groupName.value = selectedGroup?.name ?? 'Grupo de tarefas'
   } catch {
     error.value = 'Não foi possível carregar as tarefas deste grupo.'
   } finally {
@@ -79,21 +121,34 @@ function onDragStart(taskId: string) {
   draggedTaskId.value = taskId
 }
 
-function onDrop(columnKey: string) {
+async function onDrop(columnKey: string) {
   if (!draggedTaskId.value) return
 
   const task = tasks.value.find((item) => item.id === draggedTaskId.value)
   if (!task) return
 
-  if (columnKey === 'done') {
-    task.active = false
-  } else if (columnKey === 'doing') {
-    task.active = true
-  } else {
-    task.active = false
-  }
+  const nextStatus = columnKey as TaskResponse['status']
+  const nextActive = columnKey === 'doing'
 
-  draggedTaskId.value = null
+  const dataTask = {
+    id: task.id,
+    name: task.name,
+    description: task.description,
+    group_id: taskGroupId.value,
+    status: nextStatus
+  }
+  try {
+    await taskService.updateTask(
+      dataTask,
+      authStore.token,
+    )
+
+    await loadTasks()
+  } catch {
+    error.value = 'Não foi possível atualizar o status da tarefa.'
+  } finally {
+    draggedTaskId.value = null
+  }
 }
 
 function goBack() {
@@ -105,7 +160,7 @@ function openCreateTaskModal() {
     group_id: taskGroupId.value,
     name: '',
     description: '',
-    status: 'todo',
+    status: 'PENDING',
   }
   createTaskError.value = ''
   isCreateTaskModalOpen.value = true
@@ -134,15 +189,14 @@ async function handleCreateTask() {
   createTaskError.value = ''
 
   try {
-    const taskData = {
-      group_id: taskGroupId.value,
-      name,
-      description,
-      status: null,
-      group_id: taskGroupId.value
-    }
     await taskService.createTask(
-      taskData,
+      {
+        name,
+        description,
+        active: newTaskForm.value.status === 'doing',
+        status: newTaskForm.value.status,
+        group_id: taskGroupId.value,
+      },
       authStore.token,
     )
 
@@ -214,10 +268,6 @@ onMounted(() => {
       </div>
 
       <form class="modal-form" @submit.prevent="handleCreateTask">
-        <div class="form-field">
-          <label for="task-group-id">Grupo</label>
-          <input id="task-group-id" v-model="newTaskForm.group_id" type="text" readonly />
-        </div>
 
         <div class="form-field">
           <label for="task-name">Nome</label>

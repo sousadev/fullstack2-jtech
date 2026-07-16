@@ -23,8 +23,8 @@ export const taskService = {
   createTask(data: TaskRequest, token: string | undefined) {
     return api.post<TaskResponse>(`/tasks`, data, token)
   },
-  updateTask(groupId: string, taskId: string, data: TaskRequest, token: string | undefined) {
-    return api.put<TaskResponse>(`/task-groups/${groupId}/tasks/${taskId}`, data, token)
+  updateTask(data: TaskRequest, token: string | undefined) {
+    return api.put<TaskResponse>(`/tasks/${data.id}`, data, token)
   },
   deleteTask(groupId: string, taskId: string, token: string | undefined) {
     return api.delete<void>(`/task-groups/${groupId}/tasks/${taskId}`, token)
