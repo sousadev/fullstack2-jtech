@@ -26,4 +26,10 @@ public class TaskGroupController {
     public ResponseEntity<List<TaskGroupResponse>> findAll(@RequestHeader String authorization) {
         return ResponseEntity.ok(gateway.findAllByUser(authorization.replace("Bearer ", "")));
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<TaskGroupResponse> findById(@RequestHeader String authorization, @PathVariable String id) {
+        System.out.println("ID: " + id);
+        return ResponseEntity.ok().body(gateway.findById(id, authorization.replace("Bearer ", "")));
+    }
 }

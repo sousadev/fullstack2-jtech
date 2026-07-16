@@ -13,7 +13,7 @@ public interface TaskGroupInputGateway {
 
     TaskGroupResponse delete(TaskGroup taskGroup);
 
-    TaskGroupResponse findById(String id);
+    TaskGroupResponse findById(String id, String token);
 
     List<TaskGroupResponse> findAllByUser(String user_id);
 }

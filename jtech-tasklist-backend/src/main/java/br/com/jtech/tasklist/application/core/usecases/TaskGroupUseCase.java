@@ -40,8 +40,14 @@ public class TaskGroupUseCase implements TaskGroupInputGateway {
     }
 
     @Override
-    public TaskGroupResponse findById(String id) {
-        return null;
+    public TaskGroupResponse findById(String id, String token) {
+        String userId = jwtService.isValid(token) ? jwtService.getUserId(token) : null;
+        if (userId == null) {
+            return null;
+        }
+
+        return gateway.findById(id);
+
     }
 
     @Override

@@ -40,7 +40,12 @@ public class TaskGroupAdapter implements TaskGroupOutputGateway {
 
     @Override
     public TaskGroupResponse findById(String id) {
-        return null;
+        if(id == null) {
+            return null;
+        }
+
+        TaskGroupEntity entity = taskGroupRepository.findById(UUID.fromString(id)).orElse(null);
+        return toResponse(entity);
     }
 
     @Override

@@ -20,5 +20,6 @@ export interface TaskGroupResponse {
 export interface TaskRequest {
   name: string
   description: string
-  active: boolean
+  status: string
+  group_id: string
 }
