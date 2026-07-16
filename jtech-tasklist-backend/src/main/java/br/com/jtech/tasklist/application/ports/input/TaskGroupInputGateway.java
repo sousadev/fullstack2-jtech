@@ -9,9 +9,9 @@ import java.util.List;
 public interface TaskGroupInputGateway {
     TaskGroupResponse create(String token, TaskGroupRequest taskGroup);
 
-    TaskGroupResponse update(TaskGroup taskGroup);
+    TaskGroupResponse update(String id, TaskGroupRequest taskGroup, String token);
 
-    TaskGroupResponse delete(TaskGroup taskGroup);
+    TaskGroupResponse delete(String id, String token);
 
     TaskGroupResponse findById(String id, String token);
 

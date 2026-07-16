@@ -21,6 +21,10 @@ const isCreateGroupModalOpen = ref(false)
 const isCreatingGroup = ref(false)
 const createGroupError = ref('')
 const newGroup = ref({ name: '', description: '' })
+const editingGroupId = ref<string | null>(null)
+const editingGroupName = ref('')
+const groupActionError = ref('')
+const groupActionLoadingId = ref<string | null>(null)
 
 const selectedGroup = computed(() =>
   taskGroups.value.find((group) => group.id === selectedGroupId.value) ?? null,
@@ -130,6 +134,65 @@ async function handleCreateGroup() {
   }
 }
 
+function startRenameGroup(group: TaskGroupResponse) {
+  editingGroupId.value = group.id
+  editingGroupName.value = group.name
+  groupActionError.value = ''
+}
+
+function cancelRenameGroup() {
+  editingGroupId.value = null
+  editingGroupName.value = ''
+  groupActionError.value = ''
+}
+
+async function handleRenameGroup(groupId: string) {
+  const name = editingGroupName.value.trim()
+
+  if (!name) {
+    groupActionError.value = 'Informe o nome do grupo.'
+    return
+  }
+
+  groupActionLoadingId.value = groupId
+  groupActionError.value = ''
+
+  try {
+    const updatedGroup = await taskService.updateTaskGroup(groupId, name, authStore.token)
+    taskGroups.value = taskGroups.value.map((group) => (group.id === groupId ? { ...group, name: updatedGroup.name } : group))
+    cancelRenameGroup()
+  } catch {
+    groupActionError.value = 'Não foi possível renomear o grupo.'
+  } finally {
+    groupActionLoadingId.value = null
+  }
+}
+
+async function handleDeleteGroup(groupId: string) {
+  if (!window.confirm('Deseja excluir este grupo e todas as tarefas dele?')) {
+    return
+  }
+
+  groupActionLoadingId.value = groupId
+  groupActionError.value = ''
+
+  try {
+    await taskService.deleteTaskGroup(groupId, authStore.token)
+    taskGroups.value = taskGroups.value.filter((group) => group.id !== groupId)
+
+    if (selectedGroupId.value === groupId) {
+      selectedGroupId.value = null
+      tasks.value = []
+    }
+
+    cancelRenameGroup()
+  } catch {
+    groupActionError.value = 'Não foi possível excluir o grupo.'
+  } finally {
+    groupActionLoadingId.value = null
+  }
+}
+
 function verifyAuthentication() {
   if (!authStore.token) {
     router.push({ name: 'login' })
@@ -185,24 +248,42 @@ function handleLogout() {
         <div v-if="isLoading" class="loading-state">Carregando grupos...</div>
 
         <div v-else class="groups-grid">
-          <button
-            v-for="group in taskGroups"
-            :key="group.id"
-            type="button"
-            class="task-group"
-            @click="loadTasks(group.id)"
-          >
+          <article v-for="group in taskGroups" :key="group.id" class="task-group">
             <div class="group-header">
-              <h4>{{ group.name }}</h4>
-              <p>{{ group.description || 'Sem descrição' }}</p>
-            </div>
+                <template v-if="editingGroupId === group.id">
+                  <form class="group-edit-form" @submit.prevent="handleRenameGroup(group.id)" @click.stop>
+                    <input v-model="editingGroupName" type="text" placeholder="Novo nome do grupo" />
+                    <div class="group-edit-actions">
+                      <button type="submit" class="mini-action-button primary" :disabled="groupActionLoadingId === group.id">
+                        {{ groupActionLoadingId === group.id ? 'Salvando...' : 'Salvar' }}
+                      </button>
+                      <button type="button" class="mini-action-button secondary" @click.stop="cancelRenameGroup">
+                        Cancelar
+                      </button>
+                    </div>
+                  </form>
+                </template>
+                <template v-else>
+                  <h4>{{ group.name }}</h4>
+                  <p>{{ group.description || 'Sem descrição' }}</p>
+                </template>
+              </div>
 
-            <div class="group-meta">
-              <span>{{ group.tasks?.length ?? 0 }} tarefas</span>
-              <span class="group-action">Ver tarefas</span>
+              <div class="group-meta">
+                <span>{{ group.tasks?.length ?? 0 }} tarefas</span>
+                <button type="button" class="group-action-link" @click.stop="loadTasks(group.id)">Ver tarefas</button>
+              </div>
+
+            <div v-if="editingGroupId !== group.id" class="task-group-actions" @click.stop>
+              <button type="button" class="group-action-button edit" @click="startRenameGroup(group)">Renomear</button>
+              <button type="button" class="group-action-button delete" @click="handleDeleteGroup(group.id)" :disabled="groupActionLoadingId === group.id">
+                {{ groupActionLoadingId === group.id ? 'Excluindo...' : 'Excluir' }}
+              </button>
             </div>
-          </button>
+          </article>
         </div>
+
+        <p v-if="groupActionError" class="feedback-error">{{ groupActionError }}</p>
 
       </section>
     </section>

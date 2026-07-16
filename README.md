@@ -1,130 +1,110 @@
-# Desafio Técnico Fullstack2 - JTech
+# Desafio tecnico - Tasker - JTech - Gestor de tarefas
 
 ## Sistema TODO List Multi-usuário com Arquitetura Avançada
 
-### Contextualização e Objetivo
+### 1. Visão Geral da Arquitetura
 
-A **JTech** busca desenvolvedores frontend experientes capazes de construir aplicações robustas e escaláveis com arquitetura bem definida. Este desafio avalia sua competência em gerenciamento de estado complexo, arquitetura modular e implementação de sistemas multi-usuário.
+O sistema **Tasker** foi projetado seguindo uma arquitetura desacoplada e modular, garantindo separação completa entre a interface com o usuário (Frontend) e o motor de regras de negócio (Backend).
 
-**Objetivo:** Desenvolver uma aplicação frontend sofisticada que simule um sistema TODO List multi-usuário, demonstrando expertise em arquitetura de componentes, gerenciamento de estado avançado e boas práticas de desenvolvimento.
+#### Backend (Java Spring Boot)
+O backend adota o padrão **Clean Architecture Hexagonal** (Ports and Adapters), que protege a regra de negócios (core) de influências e dependências de frameworks externos ou bancos de dados:
+*   **Domain (Core)**: Contém as entidades de negócio puras ([User](file:///Users/italosousa/desafio-jtech/fullstack2-jtech/jtech-tasklist-backend/src/main/java/br/com/jtech/tasklist/application/core/domains/User.java), [Task](file:///Users/italosousa/desafio-jtech/fullstack2-jtech/jtech-tasklist-backend/src/main/java/br/com/jtech/tasklist/application/core/domains/Task.java), [TaskGroup](file:///Users/italosousa/desafio-jtech/fullstack2-jtech/jtech-tasklist-backend/src/main/java/br/com/jtech/tasklist/application/core/domains/TaskGroup.java)) e enums ([TaskStatusEnum](file:///Users/italosousa/desafio-jtech/fullstack2-jtech/jtech-tasklist-backend/src/main/java/br/com/jtech/tasklist/application/core/domains/TaskStatusEnum.java)), livres de qualquer anotação de persistência (JPA) ou frameworks.
+*   **Use Cases (Core)**: Implementa as regras de negócio e fluxos da aplicação (como [TaskUseCase](file:///Users/italosousa/desafio-jtech/fullstack2-jtech/jtech-tasklist-backend/src/main/java/br/com/jtech/tasklist/application/core/usecases/TaskUseCase.java), [TaskGroupUseCase](file:///Users/italosousa/desafio-jtech/fullstack2-jtech/jtech-tasklist-backend/src/main/java/br/com/jtech/tasklist/application/core/usecases/TaskGroupUseCase.java), e [AuthUseCase](file:///Users/italosousa/desafio-jtech/fullstack2-jtech/jtech-tasklist-backend/src/main/java/br/com/jtech/tasklist/application/core/usecases/AuthUseCase.java)).
+*   **Ports (Core)**: Interfaces de entrada (Input Gateways) e saída (Output Gateways) que definem o contrato de comunicação entre o Core e os agentes externos.
+*   **Adapters (Infrastructure)**:
+    *   **Input**: Controllers REST ([AuthController](file:///Users/italosousa/desafio-jtech/fullstack2-jtech/jtech-tasklist-backend/src/main/java/br/com/jtech/tasklist/adapters/input/controllers/AuthController.java), [TaskGroupController](file:///Users/italosousa/desafio-jtech/fullstack2-jtech/jtech-tasklist-backend/src/main/java/br/com/jtech/tasklist/adapters/input/controllers/TaskGroupController.java), [TaskController](file:///Users/italosousa/desafio-jtech/fullstack2-jtech/jtech-tasklist-backend/src/main/java/br/com/jtech/tasklist/adapters/input/controllers/TaskController.java)) recebem requisições HTTP e validam payloads.
+    *   **Output**: Mapeamento de dados e persistência utilizando JPA/Hibernate ([TaskGroupAdapter](file:///Users/italosousa/desafio-jtech/fullstack2-jtech/jtech-tasklist-backend/src/main/java/br/com/jtech/tasklist/adapters/output/TaskGroupAdapter.java)) encapsulando os Repositories JPA em banco PostgreSQL.
+    *   **Security (JWT)**: O [JwtAdapter](file:///Users/italosousa/desafio-jtech/fullstack2-jtech/jtech-tasklist-backend/src/main/java/br/com/jtech/tasklist/adapters/JwtAdapter.java) gerencia a verificação e geração de tokens que delimitam a autorização, assegurando que os dados de tarefas sejam isolados por usuário.
 
-## Especificações Técnicas
+#### Frontend (Vue.js 3)
+O frontend está estruturado como uma **Single Page Application (SPA)** modular focada em tipagem forte e alto desempenho:
+1.  **Views & Componentes**: Implementado utilizando a **Composition API** e `<script setup>`. O painel principal ([VisualizarTarefaView.vue](file:///Users/italosousa/desafio-jtech/fullstack2-jtech/jtech-tasklist-frontend/src/views/VisualizarTarefaView.vue)) gerencia as tarefas em colunas interativas Kanban reativas com funcionalidade de arrastar e soltar (Drag & Drop).
+2.  **Gerenciamento de Estado (Pinia)**: Controla o estado de autenticação (JWT) de forma persistente, preservando a sessão ativa após recarregamentos.
+3.  **Services**: Uma camada centralizada para requisições HTTP (API Client) contendo tratamento e interceptação automática para adicionar os cabeçalhos de autenticação JWT (`Bearer <token>`).
 
-### Requisitos Funcionais
+### 2. Stack Tecnológica
 
-#### Sistema de Autenticação Simulada
+*   **Backend**:
+    *   **Java 21** e **Spring Boot 3.4.0**: Escolhidos por sua estabilidade, injeção de dependências robusta e ecossistema maduro.
+    *   **Spring Security & JWT**: Essencial para a proteção e isolamento multi-usuário dos dados.
+    *   **PostgreSQL & Hibernate (JPA)**: Banco relacional robusto com excelente suporte a transações ACID e consultas estruturadas.
+    *   **JUnit 5, Mockito & AssertJ**: Garantia de alta cobertura e estabilidade das regras de negócios.
+*   **Frontend**:
+    *   **Vue 3 (Composition API)** e **TypeScript**: Desenvolvimento moderno com tipagem estática e reatividade eficiente.
+    *   **Pinia**: Gerenciador de estado moderno e otimizado para Vue 3.
+    *   **CSS Customizado**: CSS customizado altamente performático para a interface fluida do painel Kanban.
+    *   **NeonDB PostGreSQL**: Resolvi manter um banco de dados real mesmo que a nível de teste para melhor comunicação e manter o mais real possível
 
-1. **Interface de Login**: Tela de autenticação com validação de campos não vazios
-2. **Autenticação Mock**: Qualquer combinação válida de usuário/senha redireciona para a aplicação
-3. **Persistência de Sessão**: Manter dados do usuário logado no estado global da aplicação
+### 3. Como Rodar Localmente
 
-#### Gerenciamento Avançado de Listas
+#### Requisitos
+- JDK 21 instalado
+- Node.js (v18+) e Yarn instalados
+- Banco PostgreSQL ativo (ou use a string de conexão configurada em nuvem)
+- Use o banco de dados de teste disponível na string de conexão no application.properties
 
-1. **Múltiplas Listas de Tarefas**: Usuário pode criar listas categorizadas (ex: "Trabalho", "Estudos", "Pessoal")
-2. **CRUD Completo de Listas**:
-   * Criar novas listas com nomes personalizados
-   * Renomear listas existentes com validação
-   * Excluir listas com confirmação e verificação de dependências
-3. **Navegação entre Listas**: Interface intuitiva para alternar entre diferentes listas
+#### Backend
+1. Entre na pasta do backend:
+   ```bash
+   cd jtech-tasklist-backend
+   ```
+2. Configure a variável de ambiente `JWT_SECRET` (pode exportar no terminal ou colocar no arquivo `.env`):
+   ```bash
+   export JWT_SECRET=sua-chave-secreta-muito-segura-e-longa-com-mais-de-256-bits
+   ```
+3. Execute o servidor Spring Boot:
+   ```bash
+   ./gradlew bootRun
+   ```
 
-#### Sistema Completo de Tarefas
+#### Frontend
+1. Entre na pasta do frontend:
+   ```bash
+   cd jtech-tasklist-frontend
+   ```
+2. Instale as dependências:
+   ```bash
+   yarn install
+   ```
+3. Execute o servidor de desenvolvimento:
+   ```bash
+   yarn dev
+   ```
 
-1. **Gerenciamento por Lista**: Cada lista mantém suas próprias tarefas independentemente
-2. **CRUD de Tarefas**: Adicionar, editar, remover e marcar tarefas como concluídas dentro de cada lista
-3. **Validações Avançadas**: Prevenção de duplicatas, validação de campos obrigatórios
+### 4. Como Rodar os Testes (Backend)
+Para rodar a suíte de testes unitários do backend, execute o seguinte comando na pasta `jtech-tasklist-backend`:
+```bash
+./gradlew test
+```
 
-#### Persistência e Navegação
+### 5. Estrutura de Pastas Detalhada (Backend)
+```text
+jtech-tasklist-backend/src/main/java/br/com/jtech/tasklist/
+├── adapters/                  # Interface Adapters (Web Controllers, DB Adapters, JWT Services)
+│   ├── input/controllers/     # REST Endpoints (Auth, Task, TaskGroup)
+│   └── output/                # Implementações concretas de Gateways (JPA, DB repositories)
+├── application/               # Core Application Layer
+│   ├── core/                  # Regras de Negócio e Domínio
+│   │   ├── domains/           # Entidades Puras (User, Task, TaskGroup)
+│   │   └── usecases/          # Casos de Uso (AuthUseCase, TaskUseCase, TaskGroupUseCase)
+│   └── ports/                 # Interfaces de fronteira (Input e Output Gateways)
+└── config/                    # Configurações de frameworks e injeção de dependências
+```
 
-1. **Estado Persistente**: Todo o estado (usuário, listas, tarefas) gerenciado pelo Pinia e persistido
-2. **Roteamento**: Vue Router para separar autenticação da aplicação principal
-3. **Guards de Rota**: Proteção de rotas para usuários não autenticados
+### 6. Decisões Técnicas Aprofundadas
+*   **Clean Architecture**: Optou-se por isolar a lógica de domínio (`application/core`) para que mudanças futuras no banco de dados (ex. migrar para MongoDB) ou frameworks HTTP exijam apenas alterações na camada de `adapters`, sem tocar nas regras de negócio.
+*   **Controle de Propriedade**: Cada requisição de alteração/exclusão valida se o ID do recurso solicitado pertence ao `userId` extraído do token JWT correspondente à sessão do usuário logado.
 
+### 7. Melhorias e Roadmap
+*   **Conteinerização**: Adicionar suporte a `Docker` e `Docker Compose` para inicializar a aplicação e banco de dados localmente de forma automatizada.
+*   **Testes de Integração E2E**: Implementar testes automatizados end-to-end com WebTestClient no backend e Vitest/Cypress no frontend.
 
-### Stack Tecnológica Obrigatória
+```.env
+PORT=8081
+DS_URL=ep-snowy-cloud-ac29xlw0-pooler.sa-east-1.aws.neon.tech
+DS_DATABASE=neondb
+DS_USER=neondb_owner
+DS_PASS=npg_HXu1ndyWj4vi
+JWT_SECRET=JTechTaskListSecretKeyMustBeAtLeast32BytesLong
 
-* **Framework**: Vue 3 (Composition API)
-* **Roteamento**: Vue Router 4
-* **Gerenciamento de Estado**: Pinia
-* **UI Framework**: Material Design (Vuetify ou biblioteca equivalente)
-* **Testes**: Vitest para testes unitários abrangentes
-* **TypeScript**: Fortemente recomendado para tipagem robusta
-
-# BACKEND
-
-## Especificações Técnicas
-
-### Requisitos Funcionais
-
-#### Sistema de Autenticação Segura
-
-1. **Registro de Usuários**:
-   * Endpoint `POST /auth/register` para cadastro com nome, email e senha
-   * Implementação de hash seguro de senhas utilizando bcrypt
-   * Validação de unicidade de email
-2. **Autenticação JWT**:
-   * Endpoint `POST /auth/login` para autenticação e geração de token JWT
-   * Implementação de refresh token para segurança aprimorada
-
-#### Gerenciamento de Tarefas com Segurança
-
-1. **CRUD Completo de Tarefas**:
-   * `POST /tasks`: Criar tarefa associada ao usuário autenticado
-   * `GET /tasks`: Listar exclusivamente tarefas do usuário logado
-   * `GET /tasks/{id}`: Buscar tarefa específica com validação de propriedade
-   * `PUT /tasks/{id}`: Atualizar tarefa com controle de acesso
-   * `DELETE /tasks/{id}`: Remover tarefa com validação de proprietário
-2. **Autorização Robusta**: Todas as rotas protegidas por JWT com validação de propriedade dos recursos
-
-### Requisitos Não Funcionais
-
-#### Arquitetura e Design Patterns
-
-1. **Princípios SOLID**: Implementação rigorosa dos cinco princípios em todas as camadas
-2. **Arquitetura em Camadas**: Estrutura bem definida (Controller → Service → Repository → Domain)
-3. **Injeção de Dependência**: Utilização adequada do Spring Framework para IoC
-4. **Exception Handling**: Sistema robusto de tratamento centralizado de exceções
-
-#### Qualidade e Testabilidade
-
-1. **Testes Unitários**: Cobertura completa da camada de serviço com cenários de sucesso e falha
-2. **Testes de Integração**: Validação end-to-end dos endpoints com Spring Test
-3. **Mocks e Stubs**: Utilização adequada de Mockito para isolamento de dependências
-
-### Stack Tecnológica Obrigatória
-
-* **Linguagem**: Java 17+
-* **Framework**: Spring Boot, Spring Security, Spring Validation
-* **Persistência**: Spring Data JPA com Hibernate
-* **Banco de Dados**: PostgreSQL
-* **Segurança**: JWT, BCrypt
-* **Testes**: JUnit 5, Mockito, Spring Boot Test
-
-## Critérios de Avaliação
-
-* **Aplicação de SOLID**: Demonstração clara e justificada dos princípios SOLID (critério principal)
-* **Qualidade Arquitetural**: Design limpo, modular com separação clara de responsabilidades
-* **Cobertura de Testes**: Suite robusta e significativa de testes unitários e de integração
-* **Implementação de Segurança**: Autenticação e autorização corretamente implementadas
-* **Domínio da Stack**: Utilização avançada e adequada do ecossistema Spring
-* **Domínio da Stack**: Utilização avançada das ferramentas do ecossistema Vue.js
-* **Modelagem de Dados**: Relacionamento bem definido entre entidades User e Task
-* **Documentação Técnica**: README detalhado com justificativas arquiteturais
-
-## Expectativa de Entrega
-
-* **Prazo**: Até 3 dias corridos a partir do recebimento.
-* **Formato**: Repositório Git com código-fonte completo e documentação detalhada.
-
-### Estrutura Obrigatória do `README.md`
-
-1. **Visão Geral da Arquitetura**: Descrição detalhada da estrutura e decisões arquiteturais
-2. **Stack Tecnológica**: Lista completa com justificativas para cada escolha
-3. **Como Rodar Localmente**: Instruções passo a passo para setup e execução
-4. **Como Rodar os Testes**: Comandos para executar suite completa de testes
-5. **Estrutura de Pastas Detalhada**: Mapeamento completo da organização modular do código
-6. **Decisões Técnicas Aprofundadas**: Justificativas detalhadas sobre escolhas arquiteturais, padrões e bibliotecas
-7. **Melhorias e Roadmap**: Propostas técnicas para evolução e escalabilidade da aplicação
-
----
-
-**Boa sorte! A JTech espera uma solução que demonstre maturidade em desenvolvimento frontend e visão arquitetural.**
+```

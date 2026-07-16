@@ -22,21 +22,11 @@ public class TaskGroupUseCase implements TaskGroupInputGateway {
     @Override
     public TaskGroupResponse create(String token, TaskGroupRequest taskGroupRequest) {
         String userId = jwtService.isValid(token) ? jwtService.getUserId(token) : null;
-        System.out.println("User "+ userId);
+        System.out.println("User " + userId);
         taskGroupRequest.setUser_id(userId);
 
         TaskGroup taskGroup = TaskGroup.of(taskGroupRequest);
         return gateway.create(userId, taskGroup);
-    }
-
-    @Override
-    public TaskGroupResponse update(TaskGroup taskGroup) {
-        return null;
-    }
-
-    @Override
-    public TaskGroupResponse delete(TaskGroup taskGroup) {
-        return null;
     }
 
     @Override
@@ -46,8 +36,11 @@ public class TaskGroupUseCase implements TaskGroupInputGateway {
             return null;
         }
 
-        return gateway.findById(id);
-
+        TaskGroupResponse group = gateway.findById(id);
+        if (group == null || !userId.equals(group.getUser_id())) {
+            return null;
+        }
+        return group;
     }
 
     @Override
@@ -57,5 +50,37 @@ public class TaskGroupUseCase implements TaskGroupInputGateway {
             return List.of();
         }
         return gateway.findAllByUser(userId);
+    }
+
+    @Override
+    public TaskGroupResponse update(String id, TaskGroupRequest taskGroupRequest, String token) {
+        String userId = jwtService.isValid(token) ? jwtService.getUserId(token) : null;
+        if (userId == null) {
+            return null;
+        }
+
+        TaskGroupResponse existing = gateway.findById(id);
+        if (existing == null || !userId.equals(existing.getUser_id())) {
+            return null;
+        }
+
+        taskGroupRequest.setUser_id(userId);
+        TaskGroup taskGroup = TaskGroup.of(taskGroupRequest);
+        return gateway.update(id, taskGroup);
+    }
+
+    @Override
+    public TaskGroupResponse delete(String id, String token) {
+        String userId = jwtService.isValid(token) ? jwtService.getUserId(token) : null;
+        if (userId == null) {
+            return null;
+        }
+
+        TaskGroupResponse existing = gateway.findById(id);
+        if (existing == null || !userId.equals(existing.getUser_id())) {
+            return null;
+        }
+
+        return gateway.delete(id);
     }
 }

@@ -22,25 +22,47 @@ public class TaskGroupAdapter implements TaskGroupOutputGateway {
     }
 
     @Override
-    public TaskGroupResponse create(String token, TaskGroup taskGroup) {
+    public TaskGroupResponse create(String userId, TaskGroup taskGroup) {
         TaskGroupEntity entity = TaskGroupEntity.toEntity(taskGroup);
         TaskGroupEntity saved = taskGroupRepository.save(entity);
         return toResponse(saved);
     }
 
     @Override
-    public TaskGroupResponse update(TaskGroup taskGroup) {
-        return null;
+    public TaskGroupResponse update(String id, TaskGroup taskGroup) {
+        if (id == null) {
+            return null;
+        }
+
+        TaskGroupEntity entity = taskGroupRepository.findById(UUID.fromString(id)).orElse(null);
+        if (entity == null) {
+            return null;
+        }
+
+        entity.setName(taskGroup.getName());
+        entity.setDescription(taskGroup.getDescription());
+        TaskGroupEntity saved = taskGroupRepository.save(entity);
+        return toResponse(saved);
     }
 
     @Override
-    public TaskGroupResponse delete(TaskGroup taskGroup) {
-        return null;
+    public TaskGroupResponse delete(String id) {
+        if (id == null) {
+            return null;
+        }
+
+        TaskGroupEntity entity = taskGroupRepository.findById(UUID.fromString(id)).orElse(null);
+        if (entity == null) {
+            return null;
+        }
+
+        taskGroupRepository.delete(entity);
+        return toResponse(entity);
     }
 
     @Override
     public TaskGroupResponse findById(String id) {
-        if(id == null) {
+        if (id == null) {
             return null;
         }
 
@@ -65,9 +87,12 @@ public class TaskGroupAdapter implements TaskGroupOutputGateway {
                 .id(entity.getId() != null ? entity.getId().toString() : null)
                 .name(entity.getName())
                 .description(entity.getDescription())
-                .user_id(entity.getUser() != null && entity.getUser().getId() != null ? entity.getUser().getId().toString() : null)
+                .user_id(entity.getUser() != null && entity.getUser().getId() != null
+                        ? entity.getUser().getId().toString()
+                        : null)
                 .created_at(entity.getCreatedAt())
-                .tasks(entity.getTasks() != null ? entity.getTasks().stream().map(this::toTaskResponse).toList() : List.of())
+                .tasks(entity.getTasks() != null ? entity.getTasks().stream().map(this::toTaskResponse).toList()
+                        : List.of())
                 .build();
     }
 
@@ -77,7 +102,9 @@ public class TaskGroupAdapter implements TaskGroupOutputGateway {
         }
         return TaskResponse.builder()
                 .id(entity.getId() != null ? entity.getId().toString() : null)
-                .group_id(entity.getGroup() != null && entity.getGroup().getId() != null ? entity.getGroup().getId().toString() : null)
+                .group_id(entity.getGroup() != null && entity.getGroup().getId() != null
+                        ? entity.getGroup().getId().toString()
+                        : null)
                 .name(entity.getName())
                 .description(entity.getDescription())
                 .status(entity.getStatus() != null ? entity.getStatus().name() : null)
